@@ -3,7 +3,7 @@ package znet
 import (
 	"fmt"
 	"net"
-	. "zinx/ch01/ziface"
+	"zinx/ch01/ziface"
 )
 
 type Server struct {
@@ -23,7 +23,7 @@ func (self *Server) Start() {
 	}
 	listener, err := net.ListenTCP(self.TCPVersion, addr)
 	if err != nil {
-		fmt.Println("listen error", err)
+		fmt.Println("listenr error", err)
 	}
 	fmt.Println("start Zinx server success")
 	go func() {
@@ -60,15 +60,6 @@ func (self *Server) Start() {
 	}()
 }
 
-func NewServer(name string) IServer {
-	return &Server{
-		name:       name,
-		IP:         "127.0.0.1",
-		Port:       9000,
-		TCPVersion: "tcp4",
-	}
-}
-
 func (self *Server) Stop() {
 	//todo
 }
@@ -78,4 +69,13 @@ func (self *Server) Serve() {
 
 	//todo  做一些启动服务器之外的额外业务
 	select {}
+}
+
+func NewServer(name string) ziface.IServer {
+	return &Server{
+		name:       name,
+		IP:         "127.0.0.1",
+		Port:       9000,
+		TCPVersion: "tcp4",
+	}
 }

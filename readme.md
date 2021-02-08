@@ -112,6 +112,35 @@ Go语言既然以并发编程作为语言的最核心优势
  []byte("i love you")
 ``` 
  
+### defer 
+ 这些调用直到 return 前才被执。因此，可以用来做资源清理。
+ 多个defer语句，按先进后出的方式执行。
+ 
+ 用途
+ 1. 关闭文件句柄
+ 2. 锁资源释放
+ 3. 数据库连接释放
+ 
+ ### type定义
+ 
+  用途
+  1. 定义struct
+   ```go
+     type User struct{}
+   ```
+  
+  2. 定义interface
+  
+   ```go
+    type IUser interface{} 
+   ```
+  
+  3. 定义func
+   
+   ```go
+    type HandleFunc func()
+   ``` 
+      
  
  ## 问题记录
  1. ch01 里的server 如果发生了错误

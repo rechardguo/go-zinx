@@ -1,6 +1,7 @@
 package znet
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	. "zinx/ch02/ziface"
@@ -27,6 +28,7 @@ func (self *Server) Start() {
 	}
 	fmt.Println("start Zinx server success")
 	go func() {
+		var cid uint32 = 0
 		for {
 			// accept是阻塞的,等待客户端的连接
 			conn, err := listener.AcceptTCP()
@@ -34,30 +36,27 @@ func (self *Server) Start() {
 				fmt.Println("Accept error", err)
 				continue
 			}
-			go func() {
-				for {
-					//这样写时干什么用的？ 开启一个异步的立即执行的方法
-					//相当于java的thread
-					buf := make([]byte, 512)
-					//从Connection里将数据读入到buf里
-					//count为读取的字节数
-					count, err := conn.Read(buf)
-					if err != nil {
-						fmt.Println("recieve buf error", err)
-						continue
-					}
-					fmt.Printf("receive message from client:%s \n", buf[:count])
-					//回显功能
-					if _, err := conn.Write(buf[:count]); err != nil {
-						fmt.Println("write buf error", err)
-						continue
-					}
-				}
-			}()
+			dealConn := NewConnection(conn, cid, CallBackToClient)
+			cid++
+			if dealConn != nil {
+				//每拿到一个conn后就开启一个新的线程
+				go dealConn.Start()
+			}
 
 		}
 
 	}()
+}
+
+//回调函数
+//目前写死后期会由客户端来自定义
+func CallBackToClient(conn *net.TCPConn, buf []byte, cnt int) error {
+	//回显功能
+	if _, err := conn.Write(buf[:cnt]); err != nil {
+		fmt.Println("write buf error", err)
+		return errors.New(fmt.Sprintf("write buf error:%s", err))
+	}
+	return nil
 }
 
 func NewServer(name string) IServer {

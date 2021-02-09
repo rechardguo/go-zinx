@@ -143,6 +143,7 @@ Go语言既然以并发编程作为语言的最核心优势
       
  
  ## 问题记录
+ 
  1. ch01 里的server 如果发生了错误
  ```go
          addr,err:=net.ResolveTCPAddr(self.TCPVersion,fmt.Sprintf("%s:%d",self.IP,self.Port))
@@ -155,3 +156,23 @@ Go语言既然以并发编程作为语言的最核心优势
 		}
  ```
   
+ 2. ch03 我将PingRouter的逻辑写到一个pingrouter.go里
+  再在server.go的main里写为啥不行，会报
+  
+  > D:\dev-code\my_github_code\go\src\zinx\ch03\demo\Zinx_ch03>go run server.go
+    # command-line-arguments
+    .\server.go:7:15: undefined: PingRouter
+
+提供两种解决办法
+
+- 一是同时编译两个文件
+
+```go
+go run main.go quickSort.go
+```
+
+- 二是直接运行整个 package ，编译器会自己找到入口。
+
+```go
+go run ./
+```

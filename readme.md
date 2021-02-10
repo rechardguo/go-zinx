@@ -1,12 +1,20 @@
 # 项目章节
-- ch01 基础的server
-   包含的功能有
-   
-   1.开启服务器
-   
-
+- ch01
+  
+  基础的server
+    
 - ch02
-
+   
+   将ch01 里的硬编码的Connection改成Connection
+   
+- ch03 
+   
+   将ch02里的硬编码的clientCallback改成Router
+  
+- ch04
+    
+   将硬编码的ip,port等改成从配置文件里读出来      
+   
 
 
 

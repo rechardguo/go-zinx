@@ -41,6 +41,12 @@ func TestPackagePackUnpack(t *testing.T) {
 			}
 			//构造出消息体字节数组
 			bodyBytes := make([]byte, bodyLen)
+
+			if _, err = io.ReadFull(conn, bodyBytes); err != nil {
+				fmt.Println("error in read body", err)
+				continue
+			}
+
 			//消息字节数组=消息头字节数组+消息体字节数组
 			msgBytes := append(headBytes, bodyBytes...)
 			//消息字节数组放入解析

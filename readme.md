@@ -14,8 +14,27 @@
 - ch04
     
    将硬编码的ip,port等改成从配置文件里读出来      
-   
 
+- ch05
+   
+   封装消息格式，以及进行消息的封包，拆包处理   
+   Package 消息格式 
+   
+   |消息定义|字节数|
+   |---|---|
+   |消息长度|4|
+   |消息ID|4|
+   |消息body|消息长度|
+   
+      
+   DataPack 对消息进行拆包和封包
+   
+   
+   
+   测试 DataPack
+   
+   
+   
 
 
 # go语言的总结
@@ -68,7 +87,7 @@ cs := make(chan string)
 cf := make(chan interface{})
 ```
 
-Go语言既然以并发编程作为语言的最核心优势
+
 
 ### 命名规则
 
@@ -148,7 +167,20 @@ Go语言既然以并发编程作为语言的最核心优势
    ```go
     type HandleFunc func()
    ``` 
-      
+### golang -- 网络字节编解码
+
+解码
+
+①使用bytes.NewReader/bytes.Buffer来存储要解码的ascii串
+
+②使用binary.Read来解码
+
+ 
+ ### go 语言测试
+ 
+ 
+ 
+     
  
  ## 问题记录
  

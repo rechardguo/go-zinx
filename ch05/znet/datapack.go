@@ -53,18 +53,18 @@ func (self *DataPack) UnPack(dataBytes []byte) (ziface.IPackage, error) {
 	buf := bytes.NewReader(dataBytes)
 	//buf := bytes.NewBuffer(dataBytes)
 	//读取的消息字节数
-	if err := binary.Read(buf, binary.LittleEndian, pack.DataLen); err != nil {
+	if err := binary.Read(buf, binary.LittleEndian, &pack.DataLen); err != nil {
 		fmt.Println("unpack recv data error", err)
 		return nil, err
 	}
 	//消息index
-	if err := binary.Read(buf, binary.LittleEndian, pack.DataIndex); err != nil {
+	if err := binary.Read(buf, binary.LittleEndian, &pack.DataIndex); err != nil {
 		fmt.Println("unpack recv data error", err)
 		return nil, err
 	}
 
 	pack.SetData(make([]byte, pack.GetDataLen()))
-	if err := binary.Read(buf, binary.LittleEndian, pack.Data); err != nil {
+	if err := binary.Read(buf, binary.LittleEndian, &pack.Data); err != nil {
 		fmt.Println("unpack recv data error", err)
 		return nil, err
 	}

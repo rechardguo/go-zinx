@@ -42,7 +42,7 @@ func TestPackagePackUnpack(t *testing.T) {
 					fmt.Println("unpack recv data error", err)
 					continue
 				}
-				println("消息index:", p.GetDataIndex(), ",消息body:", string(p.GetData()))
+				println("消息index:", p.GetMsgId(), ",消息body:", string(p.GetData()))
 			}
 
 		}

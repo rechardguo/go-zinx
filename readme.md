@@ -25,7 +25,14 @@
    L 定义数值的长度；
    V 表示实际的数值。
    T 和 L 的长度固定，一般是2或4个字节，V 的长度由 Length 指定。
-      
+    
+- ch06  多路由      
+
+- ch07 消息的读写分离
+
+之前的章节里的所有的消息的读和写都是放在StartReader()这个方法里的，
+现在要将读放到StartReader()而写放到StartWriter()里，
+StartReader()和StartWriter()是2个协程
 
    
    封装消息格式，以及进行消息的封包，拆包处理   
@@ -184,10 +191,24 @@ cf := make(chan interface{})
    ``` 
 ### golang -- 网络编程
 
+ #### channel
+  [Channel](https://www.runoob.com/w3cnote/go-channel-intro.html) 类型的定义格式如下
+  ```go
+    ChannelType = ( "chan" | "chan" "<-" | "<-" "chan" ) ElementType .
+  ```
+  > 它包括三种类型的定义。可选的<-代表channel的方向。如果没有指定方向，那么Channel就是双向的，既可以接收数据，也可以发送数据。
 
 
+  e.g
+  
+  ```go
+  ExitChan chan bool
+  MsgChan chan []byte
+  ```
+  
+   
+ #### 解码
 
-解码
 
 ①使用bytes.NewReader/bytes.Buffer来存储要解码的ascii串
 

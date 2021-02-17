@@ -21,7 +21,7 @@ func NewPackage(msgId uint32, data []byte) ziface.IMessage {
 func (self *Message) GetDataLen() uint32 {
 	return self.DataLen
 }
-func (self *Message) GetDataIndex() uint32 {
+func (self *Message) GetMsgId() uint32 {
 	return self.DataIndex
 }
 func (self *Message) GetData() []byte {

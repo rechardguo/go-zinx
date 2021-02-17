@@ -45,7 +45,7 @@ func (self *Connection) Send(msgId uint32, data []byte) error {
 //连接的读业务方法
 func (self *Connection) StartReader() {
 	fmt.Println("[Reader Goroutine is running]")
-	defer fmt.Println("connId=", self.ConnId, " Reader exit, remote addr is ", self.RemoteAddr().String())
+	defer fmt.Println("connId=", self.ConnId, "[conn Reader exit!], remote addr is ", self.RemoteAddr().String())
 	defer self.Stop()
 
 	for {
@@ -60,19 +60,19 @@ func (self *Connection) StartReader() {
 		headBytes := make([]byte, dp.GetHeadLen())
 		if _, err := io.ReadFull(self.GetConn(), headBytes); err != nil {
 			fmt.Println("error in read head", err)
-			continue
+			return
 		}
 
 		msg, err := dp.UnPack(headBytes)
 		if err != nil {
 			fmt.Println("error in unpack ", err)
-			continue
+			return
 		}
 		//构造出消息体字节数组
 		bodyBytes := make([]byte, msg.GetDataLen())
 		if _, err := io.ReadFull(self.GetConn(), bodyBytes); err != nil {
 			fmt.Println("error in read body", err)
-			continue
+			return
 		}
 		msg.SetData(bodyBytes)
 		request := &Request{
@@ -120,7 +120,7 @@ func (self *Connection) StartWriter() {
 	}
 }
 func (self *Connection) Stop() {
-	fmt.Println("connection Stop().. ConnID=", self.ConnId)
+	fmt.Println("connection Stop()...ConnID=", self.ConnId)
 	if self.IsClosed {
 		return
 	}

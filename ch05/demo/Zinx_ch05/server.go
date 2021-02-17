@@ -12,7 +12,7 @@ type PingRouter struct {
 
 func (self *PingRouter) Handle(request ziface.IRequest) {
 	fmt.Println("call router handler")
-	fmt.Println("recv from client message index:", request.GetMessage().GetDataIndex(),
+	fmt.Println("recv from client message index:", request.GetMessage().GetMsgId(),
 		"message:", string(request.GetMessage().GetData()))
 	request.GetConnection().Send(1, []byte("ping...ping...ping \n"))
 }

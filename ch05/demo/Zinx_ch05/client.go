@@ -49,7 +49,7 @@ func main() {
 				fmt.Println("unpack recv data error", err)
 				continue
 			}
-			println("recv server response , 消息index:", p.GetDataIndex(), ",消息body:", string(p.GetData()))
+			println("recv server response , 消息index:", p.GetMsgId(), ",消息body:", string(p.GetData()))
 		}
 		time.Sleep(1 * time.Second)
 	}

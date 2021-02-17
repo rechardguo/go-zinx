@@ -11,6 +11,8 @@ type IConnection interface {
 	GetConn() *net.TCPConn
 
 	RemoteAddr() net.Addr
+
+	Send(uint32, []byte) error
 }
 
 type HandleFunc func(*net.TCPConn, []byte, int) error

@@ -1,7 +1,6 @@
 package znet
 
 import (
-	"bytes"
 	"encoding/binary"
 	"fmt"
 	"io"
@@ -29,33 +28,23 @@ func TestPackagePackUnpack(t *testing.T) {
 
 			//先读取出消息头字节数组
 			headBytes := make([]byte, dp.GetHeadLen())
-			if _, err = io.ReadFull(conn, headBytes); err != nil {
-				fmt.Println("error in read head", err)
-				continue
-			}
-			//从消息头里的前4个字节读出body长度
-			var bodyLen int32
-			if err := binary.Read(bytes.NewBuffer(headBytes[:4]), binary.LittleEndian, &bodyLen); err != nil {
-				fmt.Println("error in read  body length", err)
-				continue
-			}
-			//构造出消息体字节数组
-			bodyBytes := make([]byte, bodyLen)
-
-			if _, err = io.ReadFull(conn, bodyBytes); err != nil {
-				fmt.Println("error in read body", err)
-				continue
-			}
-
-			//消息字节数组=消息头字节数组+消息体字节数组
-			msgBytes := append(headBytes, bodyBytes...)
+			io.ReadFull(conn, headBytes)
 			//消息字节数组放入解析
-			p, err := dp.UnPack(msgBytes)
+			p, err := dp.UnPack(headBytes)
 			if err != nil {
 				fmt.Println("error unpack bytes", err)
 				continue
 			}
-			println("消息index:", p.GetDataIndex(), ",消息body:", string(p.GetData()))
+
+			if p.GetDataLen() > 0 {
+				p.SetData(make([]byte, p.GetDataLen()))
+				if err := binary.Read(conn, binary.LittleEndian, p.GetData()); err != nil {
+					fmt.Println("unpack recv data error", err)
+					continue
+				}
+				println("消息index:", p.GetDataIndex(), ",消息body:", string(p.GetData()))
+			}
+
 		}
 
 	}()
@@ -64,17 +53,9 @@ func TestPackagePackUnpack(t *testing.T) {
 	conn, err := net.Dial("tcp", "127.0.0.1:8888")
 	//构造2条消息发出去
 	msg1 := []byte("how are you")
-	pack1 := &Package{
-		DataLen:   uint32(len(msg1)),
-		DataIndex: 1,
-		Data:      msg1,
-	}
+	pack1 := NewPackage(1, msg1)
 	msg2 := []byte("hello world")
-	pack2 := &Package{
-		DataLen:   uint32(len(msg2)),
-		DataIndex: 2,
-		Data:      msg2,
-	}
+	pack2 := NewPackage(2, msg2)
 	dp := NewDataPack()
 	pack1byte, err := dp.Pack(pack1)
 	if err != nil {

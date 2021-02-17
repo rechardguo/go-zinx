@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"zinx/ch05/ziface"
 	"zinx/ch05/znet"
 )
@@ -9,14 +10,11 @@ type PingRouter struct {
 	znet.BaseRouter
 }
 
-func (self *PingRouter) PreHandle(request ziface.IRequest) {
-	request.GetConnection().GetConn().Write([]byte("PreHandle of PingRouter \n"))
-}
 func (self *PingRouter) Handle(request ziface.IRequest) {
-	request.GetConnection().GetConn().Write([]byte("ping...ping...ping \n"))
-}
-func (self *PingRouter) PostHandle(request ziface.IRequest) {
-	request.GetConnection().GetConn().Write([]byte("PostHandle of PingRouter \n"))
+	fmt.Println("call router handler")
+	fmt.Println("recv from client message index:", request.GetMessage().GetDataIndex(),
+		"message:", string(request.GetMessage().GetData()))
+	request.GetConnection().Send(1, []byte("ping...ping...ping \n"))
 }
 
 func main() {

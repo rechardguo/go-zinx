@@ -1,7 +1,6 @@
 package znet
 
 import (
-	"errors"
 	"fmt"
 	"net"
 	. "zinx/ch03/ziface"
@@ -51,17 +50,6 @@ func (self *Server) Start() {
 		}
 
 	}()
-}
-
-//回调函数
-//目前写死后期会由客户端来自定义
-func CallBackToClient(conn *net.TCPConn, buf []byte, cnt int) error {
-	//回显功能
-	if _, err := conn.Write(buf[:cnt]); err != nil {
-		fmt.Println("write buf error", err)
-		return errors.New(fmt.Sprintf("write buf error:%s", err))
-	}
-	return nil
 }
 
 func NewServer(name string) IServer {

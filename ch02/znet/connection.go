@@ -26,7 +26,7 @@ func (self *Connection) RemoteAddr() net.Addr {
 }
 
 //连接的读业务方法
-func (self *Connection) StartReader() {
+func (self *Connection) startReader() {
 	fmt.Printf("Reader Goroutine is running...")
 	defer fmt.Println("connId=", self.ConnId, " Reader exist, remote addr is ", self.RemoteAddr().String())
 	defer self.Stop()
@@ -50,7 +50,7 @@ func (self *Connection) StartReader() {
 func (self *Connection) Start() {
 	fmt.Println("connection Start().. ConnID=", self.ConnId)
 	//启动从当前连接读数据的业务
-	go self.StartReader()
+	go self.startReader()
 	//启动从当前连接写数据的业务
 
 }

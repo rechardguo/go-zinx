@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/binary"
 	"fmt"
+	"io"
 	"net"
 	"time"
+	"zinx/ch05/znet"
 )
 
 func main() {
@@ -15,23 +18,39 @@ func main() {
 	}
 
 	for {
-		msg := []byte("i love you")
+
+		dp := znet.NewDataPack()
+		msgByte, err := dp.Pack(znet.NewPackage(1, []byte("i love you")))
+		if err != nil {
+			fmt.Println("error in pack message", err)
+			return
+		}
 		//写消息到服务器端
-		_, err = conn.Write(msg)
+		_, err = conn.Write(msgByte)
 		if err != nil {
 			fmt.Println("write to server error", err)
 			return
 		}
 
-		resp := make([]byte, 512)
-		len, err := conn.Read(resp)
+		//从服务器端读出消息
+		//先读取出消息头字节数组
+		headBytes := make([]byte, dp.GetHeadLen())
+		io.ReadFull(conn, headBytes)
+		//消息字节数组放入解析
+		p, err := dp.UnPack(headBytes)
 		if err != nil {
-			fmt.Printf("error in read server response message", err)
-			return
+			fmt.Println("error unpack bytes", err)
+			continue
 		}
 
-		fmt.Printf("receive from server: %s \n", resp[:len])
-
+		if p.GetDataLen() > 0 {
+			p.SetData(make([]byte, p.GetDataLen()))
+			if err := binary.Read(conn, binary.LittleEndian, p.GetData()); err != nil {
+				fmt.Println("unpack recv data error", err)
+				continue
+			}
+			println("recv server response , 消息index:", p.GetDataIndex(), ",消息body:", string(p.GetData()))
+		}
 		time.Sleep(1 * time.Second)
 	}
 

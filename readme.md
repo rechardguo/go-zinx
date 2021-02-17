@@ -16,16 +16,31 @@
    将硬编码的ip,port等改成从配置文件里读出来      
 
 - ch05
+
+   标识域（Tag）+长度域（Length）+值域（Value），简称TLV格式。 
+     
+   TLV 是一种可变的格式，其中：
+     
+   T 可以理解为 Tag 或 Type ，用于标识标签或者编码格式信息；
+   L 定义数值的长度；
+   V 表示实际的数值。
+   T 和 L 的长度固定，一般是2或4个字节，V 的长度由 Length 指定。
+      
+
    
    封装消息格式，以及进行消息的封包，拆包处理   
-   Package 消息格式 
+   消息格式 
    
    |消息定义|字节数|
    |---|---|
-   |消息长度|4|
+   |消息头长度|4|
    |消息ID|4|
-   |消息body|消息长度|
+   |消息体|消息长度|
    
+   消息=消息头+消息体
+   
+   消息头 ：  消息头长度+ 消息ID
+   消息体
       
    DataPack 对消息进行拆包和封包
    
@@ -167,13 +182,18 @@ cf := make(chan interface{})
    ```go
     type HandleFunc func()
    ``` 
-### golang -- 网络字节编解码
+### golang -- 网络编程
+
+
+
 
 解码
 
 ①使用bytes.NewReader/bytes.Buffer来存储要解码的ascii串
 
 ②使用binary.Read来解码
+
+
 
  
  ### go 语言测试

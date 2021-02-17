@@ -32,7 +32,7 @@ func init() {
 		Version:        "v0.4",
 	}
 	//从配置文件里去读取
-	//Config.Reload()
+	Config.Reload()
 }
 
 var Config *Conf

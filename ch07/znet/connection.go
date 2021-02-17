@@ -91,7 +91,7 @@ func (self *Connection) StartReader() {
 }
 
 func (self *Connection) Start() {
-	fmt.Println("connection Start().. ConnID=", self.ConnId)
+	fmt.Println("connection Start().. ConnId=", self.ConnId)
 	//启动从当前连接读数据的业务
 	go self.StartReader()
 	//启动从当前连接写数据的业务

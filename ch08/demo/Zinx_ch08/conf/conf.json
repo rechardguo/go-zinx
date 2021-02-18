@@ -1,0 +1,10 @@
+{
+  "Name": "zinx demo server",
+  "Version": "v0.8",
+  "IP":"127.0.0.1",
+  "Port": 7777,
+  "MaxConn": 10,
+  "MaxPackageSize":1024,
+  "TaskPoolSize": 10,
+  "TaskQueueMaxLen": 100
+}

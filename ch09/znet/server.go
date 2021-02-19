@@ -20,6 +20,10 @@ type Server struct {
 	ConnClosedHook func(IConnection)
 }
 
+func (self *Server) GetConnManager() IConnManager {
+	return self.ConnManager
+}
+
 func (self *Server) OnConnConnected(hookfn func(IConnection)) {
 	self.ConnConnectedHook = hookfn
 }
@@ -46,7 +50,7 @@ func (self *Server) AddRouter(msgId uint32, router IRouter) {
 
 func (self *Server) Start() {
 	fmt.Printf("Server %s  version : %s at Ip :%s, Port: %d  is starting \n", self.name, utils.Config.Version, self.IP, self.Port)
-	fmt.Printf("maxConnection : %d, maxPackageSize : %d \n", utils.Config.MaxConn, utils.Config.MaxPackageSize)
+	fmt.Printf("maxConne : %d, maxPackageSize : %d \n", utils.Config.MaxConn, utils.Config.MaxPackageSize)
 
 	//启动任务处理池
 	self.MsgHandler.InitTaskPool()
@@ -71,8 +75,9 @@ func (self *Server) Start() {
 				continue
 			}
 			//判断是否超过最大连接数
-			if self.ConnManager.ConnNums() > int(utils.Config.MaxConn) {
-				fmt.Println("too many connection, max conn=", utils.Config.MaxConn)
+			if self.ConnManager.ConnNums() >= int(utils.Config.MaxConn) {
+				fmt.Println("===========>too many connection, max conn=", utils.Config.MaxConn)
+				conn.Close()
 				continue
 			}
 

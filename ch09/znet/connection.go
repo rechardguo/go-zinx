@@ -106,6 +106,9 @@ func (self *Connection) Start() {
 	//启动从当前连接写数据的业务
 	go self.StartWriter()
 
+	//连接连上的hook函数
+	self.TCPServer.CallConnConnected(self)
+
 }
 
 //x, y := <-c, <-c这句会一直等待计算结果发送到channel中
@@ -136,6 +139,8 @@ func (self *Connection) Stop() {
 	self.IsClosed = true
 	//close socket
 	self.TCPConn.Close()
+	//从connectionManager里移除Connection
+	self.TCPServer.GetConnManager().RemoveConn(self)
 	//连接关闭的hook函数
 	self.TCPServer.CallConnClosed(self)
 	//关闭管道
@@ -154,7 +159,5 @@ func NewConnection(server ziface.IServer, conn *net.TCPConn, cid uint32, handler
 		ExitChan:   make(chan bool, 1),
 		MsgChan:    make(chan []byte),
 	}
-	//连接连上的hook函数
-	c.TCPServer.CallConnConnected(c)
 	return c
 }

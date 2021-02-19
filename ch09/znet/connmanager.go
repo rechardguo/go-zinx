@@ -22,23 +22,25 @@ func (self *ConnManager) AddConn(connection ziface.IConnection) {
 	self.lock.Lock()
 	defer self.lock.Unlock()
 	self.conns[connection.GetConnId()] = connection
-	fmt.Printf("connId=", connection.GetConnId(), " add successful, conn nums=", self.ConnNums())
+	fmt.Printf("conn Id=%d add successful, conn nums=%d", connection.GetConnId(), self.ConnNums())
 }
 
 //根据ConnId删除Connection
 func (self *ConnManager) RemoveConnByConnId(connId uint32) {
 	self.lock.Lock()
 	defer self.lock.Unlock()
-	self.conns[connId] = nil
-	fmt.Printf("connId=", connId, " remove successful, conn nums=", self.ConnNums())
+	delete(self.conns, connId)
+	//self.conns[connId] = nil
+	fmt.Printf("conn Id=%d remove,conn nums=%d \n", connId, self.ConnNums())
 }
 
 //删除Connection
 func (self *ConnManager) RemoveConn(connection ziface.IConnection) {
 	self.lock.Lock()
 	defer self.lock.Unlock()
-	self.conns[connection.GetConnId()] = nil
-	fmt.Printf("connId=", connection.GetConnId(), " remove successful, conn nums=", self.ConnNums())
+	//self.conns[connection.GetConnId()] = nil
+	delete(self.conns, connection.GetConnId())
+	fmt.Printf("conn Id=%d remove,conn nums=%d \n", connection.GetConnId(), self.ConnNums())
 }
 
 //根据connId找到Connection

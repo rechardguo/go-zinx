@@ -55,8 +55,59 @@ StartReader()和StartWriter()是2个协程
    
    测试 DataPack
    
-   
-   
+- ch08 消息队列和工作池机制
+
+10 个 task,每个task 有自己的 taskQueue
+实现将消息放到taskqueue里
+
+```go
+ type Task struct{
+    //task里有一个队列
+    TaskQueue chan ziface.IRequest
+ }
+
+type TaskPool struct{
+   Tasks []Task
+}
+```
+
+流程
+
+`go self.MsgHandler.Process(request)`
+
+改成
+
+`self.MsgHandler.SendMsgToTaskQueue(request)`
+
+
+- ch09 实现连接的管理
+
+连接的管理有几个功能
+1. 拒绝超过最大的连接数的连接
+2. 提供连接连上的hook函数
+
+第44讲：我看完后将CallonConnStart的hook放到了NewConnection里
+导致了测试
+```go
+func OnConnConnected(conn ziface.IConnection) {
+	fmt.Println("connId=",conn.GetConnId(), "is connected")
+	resp := fmt.Sprintf("[zinx server] welcome connId=%d", conn.GetConnId())
+	//这步一直阻塞，为什么？
+	conn.Send(200, []byte(resp))
+}
+```
+
+
+
+3. 连接断开后的hook函数
+ 
+删除map里的元素，要使用delete()
+delete() 函数用于删除集合的元素, 参数为 map 和其对应的 key
+```go
+
+delete(self.conns,connId)
+//self.conns[connId] = nil
+```
 
 
 # go语言的总结

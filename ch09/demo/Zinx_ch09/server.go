@@ -31,7 +31,7 @@ func (self *PingRouter) Handle(request ziface.IRequest) {
 func OnConnConnected(conn ziface.IConnection) {
 	fmt.Println("connId=", conn.GetConnId(), "is connected")
 	resp := fmt.Sprintf("[zinx server] welcome connId=%d", conn.GetConnId())
-	go conn.Send(200, []byte(resp))
+	conn.Send(200, []byte(resp))
 }
 
 func OnConnClosed(conn ziface.IConnection) {

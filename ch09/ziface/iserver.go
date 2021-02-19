@@ -13,4 +13,5 @@ type IServer interface {
 	CallConnConnected(IConnection)
 	//调用connection 断开的hook函数
 	CallConnClosed(IConnection)
+	GetConnManager() IConnManager
 }

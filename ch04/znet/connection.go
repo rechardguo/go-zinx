@@ -26,7 +26,7 @@ func (self *Connection) RemoteAddr() net.Addr {
 	return self.Conn.RemoteAddr()
 }
 
-//连接的读业务方法
+// 连接的读业务方法
 func (self *Connection) StartReader() {
 	fmt.Printf("Reader Goroutine is running...")
 	defer fmt.Println("connId=", self.ConnId, " Reader exist, remote addr is ", self.RemoteAddr().String())
@@ -43,7 +43,7 @@ func (self *Connection) StartReader() {
 
 		/*request:=&Request{
 			Connection: self,
-			Date: buf,
+			Data: buf,
 		}
 		self.Router.PreHandle(request)
 		self.Router.Handle(request)
@@ -82,7 +82,7 @@ func (self *Connection) Handler() {
 
 }
 
-//handleFunc 就是回调函数
+// handleFunc 就是回调函数
 func NewConnection(conn *net.TCPConn, cid uint32, router ziface.IRouter) ziface.IConnection {
 	return &Connection{
 		ConnId:   cid,

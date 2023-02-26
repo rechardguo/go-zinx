@@ -1,0 +1,6 @@
+参考 https://golang.google.cn/doc/install
+1. 下载go linux版本
+2. wsl上可以通过 cp /mnt/c/Users/sdrag/Downloads/go1.20.1.linux-amd64.tar.gz /opt
+3. rm -rf /usr/local/go && tar -C /usr/local -xzf go1.20.1.linux-amd64.tar.gz
+4. export PATH=$PATH:/usr/local/go/bin 加入到$HOME/.profile
+5.  go version 测试

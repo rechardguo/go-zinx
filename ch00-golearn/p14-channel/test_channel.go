@@ -12,7 +12,7 @@ func main() {
 		defer println("sub defer end")
 
 		println("sub end")
-		ch <- 888
+		//ch <- 888
 	}()
 
 	num := <-ch

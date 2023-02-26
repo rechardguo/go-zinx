@@ -112,13 +112,87 @@ delete(self.conns,connId)
 
 # go语言的总结
 
+### go的interface和java的区别
+1. go的类型声明在后
+2. 接口不像java那样是implements, 而是在定义出一个对象，例如下面的Person必须是IPerson的接口的时候，则Person必须要有IPerson的所有的方法实现
+```go
+//声明了一个Person的接口
+IPerson.go
+type IPerson interface{
+	Walk()
+}
+
+Person.go
+type Person struct{
+    name string
+	age unit32
+}
+//这里要实现IPerson的所有接口
+func (self *Person)Walk(){
+	pmt.fprint("%s is walking",self.name)
+}
+
+func NewPerson() *IPerson{
+	//声明的类是Person,那就必须有Iperson的所有的方法
+	return &{
+		"rechard",
+		30,
+    }
+}
+```
+3. java里是 byte[] arr ,而go里是[]byte
+
+### :=和var的区别
+“:=”只能在声明“局部变量”的时候使用，而“var”没有这个限制。
+
 ### go并发
+
+报错代码:
+```go
+
+	fmt.Printf("hello %d \n", i)
+	group.Done()
+}
+func main() {
+	var group sync.WaitGroup
+	group.Add(100)
+	for i := 0; i < 100; i++ {
+		go hello(i, group)
+	}
+	println("main")
+	group.Wait()
+}
+```
+报错如下:
+> fatal error: all goroutines are asleep - deadlock!
+
+这是因为传进去的group是个拷贝对象，在hello函数里group.Done()其实是调用了group拷贝对象的Done,而不是原始对象，所以要改成如下：
+```go
+func hello(i int, group *sync.WaitGroup) {
+    defer group.Done()
+    fmt.Printf("hello %d \n", i)
+}
+
+func main() {
+    var group sync.WaitGroup
+    group.Add(100)
+    for i := 0; i < 100; i++ {
+        go hello(i, &group)
+    }
+    fmt.Println("main")
+    group.Wait()
+}
+```
+
+
 
 goroutine 类似于线程，但是可以根据需要创建多个 goroutine 并发工作。
 goroutine 是由 Go 语言的运行时调度完成，而线程是由操作系统调度完成
 goroutine 是一种非常轻量级的实现，可在单个进程里执行成千上万的并发任务，它是Go语言并发设计的核心
 
 goroutine 在多核 cpu 环境下是并行的，如果代码块在多个 goroutine 中执行，那么我们就实现了代码的并行。
+
+goroutine 是用户态线程，可是用户态线程如果没有cpu的话怎么办
 
 使用普通函数创建 goroutine
 格式 ： go 函数名( 参数列表 )
@@ -287,8 +361,12 @@ cf := make(chan interface{})
             return 
 		}
  ```
-  
- 2. ch03 我将PingRouter的逻辑写到一个pingrouter.go里
+2. ch02里
+cgo: C compiler "gcc" not found: exec: "gcc": executable file not found in %PATH%
+
+
+
+3. ch03 我将PingRouter的逻辑写到一个pingrouter.go里
   再在server.go的main里写为啥不行，会报
   
   > D:\dev-code\my_github_code\go\src\zinx\ch03\demo\Zinx_ch03>go run server.go

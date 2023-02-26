@@ -4,7 +4,7 @@ import "zinx/ch03/ziface"
 
 type Request struct {
 	Connection ziface.IConnection
-	Date       []byte
+	Data       []byte
 }
 
 func (self *Request) GetConnection() ziface.IConnection {
@@ -12,5 +12,5 @@ func (self *Request) GetConnection() ziface.IConnection {
 }
 
 func (self *Request) GetData() []byte {
-	return self.Date
+	return self.Data
 }

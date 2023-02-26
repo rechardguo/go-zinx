@@ -71,6 +71,12 @@ func main() {
 	println(cli())
 	println(cli())
 
+	//%% 就是为了在输出的字符里有%， 第一个%是转义符 %
+	//0  0
+	//%d 6
+	//d  d
+	//%06d
+	println(fmt.Sprintf("%%0%dd", 6))
 }
 
 type Age uint
